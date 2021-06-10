@@ -1,15 +1,16 @@
 import express from "express";
-import PingController from "../controller/ping";
-import UserRouter from "./user.routes";
+import AuthRouter from "./auth/auth.route";
+import UserRouter from "./user/user.route";
+import ProductRouter from "./products/product.route";
+import OrderRouter from "./orders/order.route";
 
 const router = express.Router();
 
-router.get("/ping", async (_req, res) => {
-  const controller = new PingController();
-  const response = await controller.getMessage();
-  return res.send(response);
-});
-
+router.use("/auth", AuthRouter);
 router.use("/users", UserRouter);
+router.use("/products", ProductRouter);
+// router.use('/category', CategoryRouter);
+// router.use('/payments', PaymentRouter);
+router.use("/orders", OrderRouter);
 
 export default router;

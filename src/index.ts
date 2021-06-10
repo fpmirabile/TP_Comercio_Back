@@ -37,7 +37,3 @@ createConnection(dbConfig)
     console.log("Unable to connect to db", err);
     process.exit(1);
   });
-
-app.listen(PORT, () => {
-  console.log("Server is running on port", PORT);
-});
