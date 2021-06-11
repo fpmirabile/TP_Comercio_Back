@@ -4,12 +4,9 @@ import { Cart } from "./cart";
 
 @Entity()
 export class CartItem {
-  @PrimaryGeneratedColumn('uuid')
-  id!: string;
-
-  @ManyToOne(() => Cart, cart => cart.items)
+  @ManyToOne(() => Cart, cart => cart.items, { primary: true })
   cart!: Cart;
-  @ManyToOne(() => Product)
+  @ManyToOne(() => Product, { primary: true })
   product!: Product;
 
   @Column()

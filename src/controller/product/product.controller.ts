@@ -1,24 +1,79 @@
 import express from 'express';
-import { Product } from "../../models";
+import { CreateProductDto, UpdateProductDto } from '../../dto/product/product.dto';
+import { createProduct, deleteProduct, getProduct, getProducts, updateProduct } from '../../services/product/product.service';
+import { CRUDController } from '../base.controller';
 
-export default class ProductController {
-  public async getProducts(req: express.Request, res: express.Response, next: express.NextFunction): Promise<Array<Product>> {
-    return [];
+export default class ProductController implements CRUDController {
+  public async getAll(req: express.Request, res: express.Response, next: express.NextFunction) {
+    const request = {
+      search: req.params.search,
+      category: req.params.category,
+      page: req.params.page,
+      pageSize: req.params.pageSize
+    };
+
+    try {
+      const products = getProducts(request);
+      return res.status(200).send(products);
+    } catch (e) {
+      next(e);
+    }
   }
 
-  public async createProduct(req: express.Request, res: express.Response, next: express.NextFunction): Promise<Product> {
-    return new Product();
+  public async create(req: express.Request, res: express.Response, next: express.NextFunction) {
+    const request: CreateProductDto = {
+      name: req.body.name,
+      stock: req.body.stock,
+      price: req.body.price,
+      image: req.body.image,
+      categoryId: req.body.categoryId
+    };
+
+    try {
+      const newProduct = createProduct(request);
+      return res.status(200).send(newProduct);
+    } catch (e) {
+      next(e);
+    }
   }
 
-  public async updateProduct(req: express.Request, res: express.Response, next: express.NextFunction): Promise<Product> {
-    return new Product();
+  public async update(req: express.Request, res: express.Response, next: express.NextFunction) {
+    const request: UpdateProductDto = {
+      id: req.body.id,
+      name: req.body.name,
+      stock: req.body.stock,
+      price: req.body.price,
+      image: req.body.image,
+      categoryId: req.body.categoryId
+    };
+
+    try {
+      const updatedProduct = updateProduct(request);
+      return res.status(200).send(updatedProduct);
+    } catch (e) {
+      next(e);
+    }
   }
 
-  public async getProduct(req: express.Request, res: express.Response, next: express.NextFunction): Promise<Product | null> {
-    return null;
+  public async getOne(req: express.Request, res: express.Response, next: express.NextFunction) {
+    const id = req.params.id;
+
+    try {
+      const newProduct = getProduct(id);
+      return res.status(200).send(newProduct);
+    } catch (e) {
+      next(e);
+    }
   }
 
-  public async deleteProduct(req: express.Request, res: express.Response, next: express.NextFunction): Promise<boolean | null> {
-    return false;
+  public async delete(req: express.Request, res: express.Response, next: express.NextFunction) {
+    const id = req.params.id;
+
+    try {
+      const deleteCommand = deleteProduct(id);
+      return res.status(200).send(deleteCommand);
+    } catch (e) {
+      next(e);
+    }
   }
 }

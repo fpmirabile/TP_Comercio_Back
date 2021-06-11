@@ -1,7 +1,8 @@
 import express from "express";
 import { LoginRequestDto, LoginResponseDto } from "../../dto/auth/login.dto";
 import { RegisterRequestDto } from "../../dto/auth/register.dto";
-import { doLogin, registerUser } from "../../services/user/user.service";
+import { User } from "../../models";
+import { doLogin, registerUser, resetPassword } from "../../services/user/user.service";
 
 export default class AuthenticationService {
   public async login(
@@ -40,6 +41,23 @@ export default class AuthenticationService {
       await registerUser(request);
       // TODO: Send an email ?
       return res.status(201).send();
+    } catch (e) {
+      next(e);
+    }
+  }
+
+  public async changePassword(
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ) {
+    const request = {
+      email: req.body.email,
+    };
+
+    try {
+      const operation = await resetPassword(request.email);
+      return res.status(200).json({ operation });
     } catch (e) {
       next(e);
     }

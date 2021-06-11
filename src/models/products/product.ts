@@ -6,7 +6,6 @@ import {
   UpdateDateColumn,
   ManyToOne,
 } from "typeorm";
-import { OrderItem } from "../orders/order-item";
 import { Category } from "./category";
 
 @Entity()
@@ -17,18 +16,21 @@ export class Product {
   name!: string;
   @Column()
   msrp!: number;
-  @Column()
+  @Column({
+    default: 0
+  })
   stock!: number;
   @Column()
+  imageUrl!: string;
+  @Column({
+    default: 0
+  })
   soldQuantity!: number;
   @CreateDateColumn()
   createdAt!: Date;
   @UpdateDateColumn()
   updatedAt!: Date;
 
-  @ManyToOne(_ => Category, category => category.products)
+  @ManyToOne(_ => Category, category => category.products, { cascade: true })
   category!: Category;
-
-  @ManyToOne(_ => OrderItem, details => details.products)
-  orderDetail!: OrderItem
 }

@@ -1,9 +1,9 @@
-import { Column, CreateDateColumn, Entity, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { User } from "../user/user";
 import { Transaction } from '../transaction/transaction';
 import { OrderItem } from "./order-item";
 
-enum OrderStatus {
+export enum OrderStatus {
     SHIPPED, // Se envio (funciona como completado)
     FAILED, // Se rechazo el pago
     PAID, // Se pudo conseguir el pago
@@ -13,8 +13,8 @@ enum OrderStatus {
 
 @Entity()
 export class Order {
-    @PrimaryGeneratedColumn()
-    id!: number;
+    @PrimaryGeneratedColumn('uuid')
+    id!: string;
     @Column({
         default: OrderStatus.CREATED
     })
@@ -26,10 +26,12 @@ export class Order {
 
     @ManyToOne(_ => User, user => user.orders)
     user!: User
-    @OneToMany(_ => OrderItem, details => details.order)
+    @OneToMany(_ => OrderItem, details => details.order, { cascade: true })
     details!: OrderItem[];
-    @OneToOne(() => Transaction, transaction => transaction.order)
-    transaction: Transaction | undefined;
+    @OneToOne(_ => Transaction, transaction => transaction.order)
+    transaction!: Transaction;
     @CreateDateColumn()
-    orderDate!: Date;
+    createdAt!: Date;
+    @UpdateDateColumn()
+    updatedAt!: Date;
 }

@@ -32,6 +32,16 @@ export const updateUser = async (id: string, payload: Omit<UserDto, 'id'>): Prom
   return user;
 }
 
+export const getUserByEmail = async (email: string): Promise<User> => {
+  const userRepository = getRepository(User);
+  const user = await userRepository.findOne({ email });
+  if (!user) {
+    throw 'USER_NOT_FOUND';
+  }
+
+  return user;
+}
+
 export const getUser = async (id: string): Promise<User> => {
   const userRepository = getRepository(User);
   const user = await userRepository.findOne({ id: id });
@@ -76,4 +86,13 @@ export const registerUser = async (request: RegisterRequestDto): Promise<User> =
   user.email = request.email;
   user.password = bcrypt.hashSync(request.password, 8);
   return userRepository.save(user);
+}
+
+export const resetPassword = async (email: string): Promise<boolean> => {
+  const user = getUserByEmail(email);
+  // mando el mail
+  // if mail se mando
+  // return true
+  
+  return false;
 }

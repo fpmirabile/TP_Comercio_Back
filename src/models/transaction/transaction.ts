@@ -6,7 +6,7 @@ export class Transaction {
     @PrimaryGeneratedColumn('uuid')
     id!: string;
 
-    @OneToOne(() => Order, order => order.transaction)
+    @OneToOne(_ => Order, order => order.transaction)
     order!: Order;
 
     @Column()

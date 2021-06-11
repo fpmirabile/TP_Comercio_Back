@@ -1,8 +1,14 @@
-export interface OrderDto {
-    comments: string;
-    details: OrderDetailDto;
+import { CartDto } from "../cart/cart.dto";
+
+export interface NewOrderDto {
+  comments: string;
+  cart: CartDto;
 }
 
-export interface OrderDetailDto {
-    productIds: string[];
+export interface UpdateOrderDto {
+
+}
+
+export interface OrderDto {
+  orderId: string;
 }

@@ -1,38 +1,18 @@
 import express from "express";
 import OrderController from "../../controller/order/order.controller";
+import { authenticated } from "../../middleware/auth";
 
 const router = express.Router();
 const controller = new OrderController();
 
-router.get("/", controller.getOrders);
+router.get("/", authenticated, controller.getAll);
 
-router.get("/:id", async (req, res) => {
-  // const controller = new OrderController();
-  // const response = await controller.getOrder(req.params.id);
-  // if (!response) res.status(404).send({ message: "No user found" });
-  // return res.send(response);
-});
+router.get("/:id", authenticated, controller.getOne);
 
-router.put("/", async (req, res) => {
-  // const controller = new OrderController();
-  // const response = await controller.createOrder(req.body);
-  // return res.send(response);
-});
+router.post("/", authenticated, controller.create);
 
-router.post("/", async (req, res) => {
-  // const controller = new OrderController();
-  // const response = await controller.createOrder(req.body);
-  // return res.send(response);
-});
+// router.put("/", controller.updateOrder);
 
-router.delete("/:id", async (req, res) => {
-  // const controller = new OrderController();
-  // const response = await controller.deleteOrder(req.params.id);
-  // if (!response) {
-  //   res.status(404).send({ message: "something" });
-  // }
-
-  // return res.send(response);
-});
+// router.delete("/:id", controller.deleteOrder);
 
 export default router;
