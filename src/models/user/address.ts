@@ -1,13 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
 
-@Entity()
-export class Address {
-  @PrimaryGeneratedColumn()
-  id!: number;
-  @Column((_) => AddressFields)
-  address!: AddressFields;
-}
-
 export class AddressFields {
   @Column()
   apartment!: number;
@@ -26,3 +18,12 @@ export class AddressFields {
   })
   city!: string;
 }
+
+@Entity()
+export class Address {
+  @PrimaryGeneratedColumn()
+  id!: number;
+  @Column((_) => AddressFields)
+  address!: AddressFields;
+}
+

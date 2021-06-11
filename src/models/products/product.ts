@@ -6,13 +6,13 @@ import {
   UpdateDateColumn,
   ManyToOne,
 } from "typeorm";
-import { OrderDetail } from "../orders/order-detail";
+import { OrderItem } from "../orders/order-item";
 import { Category } from "./category";
 
 @Entity()
 export class Product {
-  @PrimaryGeneratedColumn()
-  id!: number;
+  @PrimaryGeneratedColumn('uuid')
+  id!: string;
   @Column()
   name!: string;
   @Column()
@@ -29,6 +29,6 @@ export class Product {
   @ManyToOne(_ => Category, category => category.products)
   category!: Category;
 
-  @ManyToOne(_ => OrderDetail, details => details.products)
-  orderDetail!: OrderDetail
+  @ManyToOne(_ => OrderItem, details => details.products)
+  orderDetail!: OrderItem
 }

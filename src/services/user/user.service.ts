@@ -1,17 +1,19 @@
 import { getRepository } from "typeorm";
 import bcrypt from "bcryptjs";
 import { LoginRequestDto } from "../../dto/auth/login.dto";
+import { RegisterRequestDto } from "../../dto/auth/register.dto";
+import { JwtSigned } from "../../dto/auth/jwt.dto";
 import { User } from "../../models";
 import JwtService from "../jwt/jwt.service";
 import { UserDto } from "../../dto/user/user.dto";
 
-const userRepository = getRepository(User);
-
 export const getUsers = async (): Promise<Array<User>> => {
+  const userRepository = getRepository(User);
   return userRepository.find();
 };
 
 export const createUser = async (payload: UserDto): Promise<User> => {
+  const userRepository = getRepository(User);
   const user = new User();
   return userRepository.save({
     ...user,
@@ -20,6 +22,7 @@ export const createUser = async (payload: UserDto): Promise<User> => {
 };
 
 export const updateUser = async (id: string, payload: Omit<UserDto, 'id'>): Promise<User> => {
+  const userRepository = getRepository(User);
   const update = await userRepository.update({ id }, payload);
   if (!update.affected) {
     throw 'USER_UPDATE_FAILED';
@@ -30,6 +33,7 @@ export const updateUser = async (id: string, payload: Omit<UserDto, 'id'>): Prom
 }
 
 export const getUser = async (id: string): Promise<User> => {
+  const userRepository = getRepository(User);
   const user = await userRepository.findOne({ id: id });
   if (!user) {
     throw 'USER_NOT_FOUND';
@@ -39,6 +43,7 @@ export const getUser = async (id: string): Promise<User> => {
 };
 
 export const deleteUser = async (id: string): Promise<boolean> => {
+  const userRepository = getRepository(User);
   const deleteSuccessfully = await userRepository.delete({ id });
   return !!deleteSuccessfully.affected;
 }
@@ -46,6 +51,7 @@ export const deleteUser = async (id: string): Promise<boolean> => {
 export const doLogin = async (
   request: LoginRequestDto
 ): Promise<JwtSigned> => {
+  const userRepository = getRepository(User);
   const user = await userRepository.findOne({ email: request.email });
   if (!user) {
     throw "USER_NOT_FOUND";
@@ -61,6 +67,7 @@ export const doLogin = async (
 };
 
 export const registerUser = async (request: RegisterRequestDto): Promise<User> => {
+  const userRepository = getRepository(User);
   if (request.password !== request.confirmPassword) {
     throw 'CONFIRM_PASSWORD_NOT_MATCH';
   }

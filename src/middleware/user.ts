@@ -1,11 +1,11 @@
 import express from "express";
-import { body, validationResult } from "express-validator";
 import jwt from "jsonwebtoken";
+import { JwtUnsigned } from "../dto/auth/jwt.dto";
 import { getUser } from "../services/user/user.service";
 
 export const isAdmin = [
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    const token = req.token;
+    const token = (req as any).token;
     if (token) {
       const userToken = jwt.decode(token) as JwtUnsigned;
       try {

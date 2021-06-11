@@ -21,8 +21,9 @@ export const authenticated = [
     }
 
     // Necesitamos quitarle el BEARER...
-    const token = req.headers["authorization"]?.split(" ")[1];
+    const token = req.headers["authorization"];
     if (!token) {
+      console.log('invalid token', token);
       return res
         .status(401)
         .send({ auth: false, message: "No token provided." });
@@ -30,12 +31,13 @@ export const authenticated = [
 
     jwt.verify(token, jwtSecret, (err) => {
       if (err) {
+        console.log('error token', err);
         return res
           .status(500)
           .send({ auth: false, message: "Failed to authenticate token." });
       }
 
-      req.token = token;
+      (req as any).token = token;
       next();
     });
   },

@@ -1,8 +1,8 @@
-interface JwtUnsigned {
+export interface JwtUnsigned {
     userId: string;
 }
 
-interface JwtSigned {
+export interface JwtSigned {
     token: string;
     refreshToken: string;
 }

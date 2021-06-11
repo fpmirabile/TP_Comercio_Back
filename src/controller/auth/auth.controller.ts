@@ -1,5 +1,6 @@
 import express from "express";
 import { LoginRequestDto, LoginResponseDto } from "../../dto/auth/login.dto";
+import { RegisterRequestDto } from "../../dto/auth/register.dto";
 import { doLogin, registerUser } from "../../services/user/user.service";
 
 export default class AuthenticationService {

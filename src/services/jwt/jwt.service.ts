@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
+import { JwtUnsigned, JwtSigned } from "../../dto/auth/jwt.dto";
 
 export const jwtSecret: string | undefined = process.env.JWT_SECRET;
 const tokenExpirationInSeconds = 86400; // 24 HOURS

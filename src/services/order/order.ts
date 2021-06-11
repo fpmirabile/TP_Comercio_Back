@@ -1,5 +1,6 @@
 import { getRepository } from "typeorm";
-import { Order } from "../../models";
+import { OrderDto } from '../../dto/order/order.dto';
+import { Order, Product } from "../../models";
 
 // export interface IUserPayload {
 //   firstName: string;
@@ -12,13 +13,16 @@ export const getOrders = async (): Promise<Array<Order>> => {
   return orderRepository.find();
 };
 
-export const createOrder = async (payload: Object): Promise<Order> => {
+export const createOrder = async (payload: OrderDto): Promise<Order> => {
   const orderRepository = getRepository(Order);
   const order = new Order();
-  return orderRepository.save({
-    ...order,
-    ...payload,
-  });
+  order.comments = payload.comments;
+  
+  // return orderRepository.save({
+  //   ...order,
+  //   ...payload,
+  // });
+  return order;
 };
 
 export const getOrder = async (id: number): Promise<Order | null> => {

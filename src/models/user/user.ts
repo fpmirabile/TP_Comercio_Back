@@ -10,17 +10,22 @@ import {
 } from "typeorm";
 import { Order } from "../orders/order";
 import { Billing } from "./billing";
+import { Cart } from "../cart/cart";
 
 @Entity()
 export class User {
   @PrimaryGeneratedColumn("uuid")
   id!: string;
-  @Column()
+  @Column({
+    unique: true
+  })
   @PrimaryColumn()
   email!: string;
   @Column()
   password!: string;
-  @Column()
+  @Column({
+    default: false
+  })
   isAdmin!: boolean;
   @CreateDateColumn()
   createdAt!: Date;
@@ -31,4 +36,7 @@ export class User {
   orders!: Order[];
   @OneToOne((_) => Billing)
   billing!: Billing;
+  
+  @OneToMany(() => Cart, cart => cart.user)
+  carts!: Cart[]
 }
