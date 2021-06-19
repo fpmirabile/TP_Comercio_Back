@@ -10,7 +10,7 @@ export class Cart {
 
   @ManyToOne(() => User, user => user.carts)
   user!: User;
-  @OneToMany(() => CartItem, cItem => cItem.cart)
+  @OneToMany(() => CartItem, cItem => cItem.cart, { cascade: true })
   items!: CartItem[];
 
   @UpdateDateColumn()

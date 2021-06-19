@@ -1,19 +1,18 @@
 import express from "express";
-import UserController from "../../controller/user/user.controller";
+import CategoryController from "../../controller/category/category.controller";
 import { authenticated } from "../../middleware/auth";
 import { isAdmin } from "../../middleware/user";
 
 const router = express.Router();
+const controller = new CategoryController();
 
-const controller = new UserController();
+router.get("/", authenticated, controller.getAll);
 
-router.get("/", authenticated, isAdmin, controller.getAll);
+router.get("/:id", authenticated, controller.getOne);
 
-router.get("/:id", authenticated, isAdmin, controller.getOne);
+router.put("/", authenticated, isAdmin, controller.update);
 
 router.post("/", authenticated, isAdmin, controller.create);
-
-router.put("/:id", authenticated, isAdmin, controller.update)
 
 router.delete("/:id", authenticated, isAdmin, controller.delete);
 

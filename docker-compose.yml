@@ -7,6 +7,9 @@ services:
       - POSTGRES_DB=express-ts
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+      - CLOUD_NAME:almacenceliacoapi
+      - CLOUD_API_KEY:112718242582838
+      - CLOUD_SECRET_KEY:dRhozsyc0zBM2nOg4ScHNCJnWd8 
     ports:
       - "5432:5432"
   app:

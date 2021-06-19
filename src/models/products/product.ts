@@ -6,7 +6,7 @@ import {
   UpdateDateColumn,
   ManyToOne,
 } from "typeorm";
-import { Category } from "./category";
+import { Category } from "../category/category";
 
 @Entity()
 export class Product {
@@ -16,12 +16,16 @@ export class Product {
   name!: string;
   @Column()
   msrp!: number;
+  @Column()
+  actualPrice!: number;
   @Column({
     default: 0
   })
   stock!: number;
-  @Column()
-  imageUrl!: string;
+  @Column({
+    nullable: true
+  })
+  imageUrl?: string;
   @Column({
     default: 0
   })

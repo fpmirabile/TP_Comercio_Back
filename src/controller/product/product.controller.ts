@@ -1,15 +1,15 @@
 import express from 'express';
-import { CreateProductDto, UpdateProductDto } from '../../dto/product/product.dto';
+import { CreateProductDto, SearchProductDto, UpdateProductDto } from '../../dto/product/product.dto';
 import { createProduct, deleteProduct, getProduct, getProducts, updateProduct } from '../../services/product/product.service';
 import { CRUDController } from '../base.controller';
 
 export default class ProductController implements CRUDController {
   public async getAll(req: express.Request, res: express.Response, next: express.NextFunction) {
-    const request = {
+    const request: SearchProductDto = {
       search: req.params.search,
-      category: req.params.category,
-      page: req.params.page,
-      pageSize: req.params.pageSize
+      category: req.params.categoryId,
+      page: Number(req.params.page),
+      pageSize: Number(req.params.pageSize)
     };
 
     try {
@@ -59,8 +59,8 @@ export default class ProductController implements CRUDController {
     const id = req.params.id;
 
     try {
-      const newProduct = getProduct(id);
-      return res.status(200).send(newProduct);
+      const product = getProduct(id);
+      return res.status(200).send(product);
     } catch (e) {
       next(e);
     }

@@ -2,7 +2,7 @@ import { getRepository } from "typeorm";
 import { NewOrderDto } from '../../dto/order/order.dto';
 import { CartItem, Order, OrderItem } from "../../models";
 import { OrderStatus } from "../../models/orders/order";
-import { getCartItems } from "../cart/cart";
+import { getCartItems } from "../cart/cart.service";
 import { getUser } from "../user/user.service";
 
 export const getOrders = async (): Promise<Array<Order>> => {

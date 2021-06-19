@@ -7,10 +7,11 @@ import {
   deleteUser,
 } from "../../services/user/user.service";
 import { UserDto } from "../../dto/user/user.dto";
+import { CRUDController } from '../base.controller';
 
-export default class UserController {
+export default class UserController implements CRUDController {
 
-  public async getUsers(req: express.Request, res: express.Response, next: express.NextFunction) {
+  public async getAll(req: express.Request, res: express.Response, next: express.NextFunction) {
     try {
       const users = await getUsers();
       return res.status(200).send(users);
@@ -19,7 +20,7 @@ export default class UserController {
     }
   }
 
-  public async createUser(req: express.Request, res: express.Response, next: express.NextFunction) {
+  public async create(req: express.Request, res: express.Response, next: express.NextFunction) {
     const request: UserDto = {
       email: req.body.email,
       password: req.body.password,
@@ -34,7 +35,7 @@ export default class UserController {
     }
   }
 
-  public async updateUser(req: express.Request, res: express.Response, next: express.NextFunction) {
+  public async update(req: express.Request, res: express.Response, next: express.NextFunction) {
     const request: UserDto = {
       id: req.body.id,
       email: req.body.email,
@@ -54,7 +55,7 @@ export default class UserController {
     }
   }
 
-  public async getUser(req: express.Request, res: express.Response, next: express.NextFunction) {
+  public async getOne(req: express.Request, res: express.Response, next: express.NextFunction) {
     const userId = req.params.id;
     try {
       const user = await getUser(userId);
@@ -64,7 +65,7 @@ export default class UserController {
     }
   }
 
-  public async deleteUser(req: express.Request, res: express.Response, next: express.NextFunction) {
+  public async delete(req: express.Request, res: express.Response, next: express.NextFunction) {
     const userId = req.params.id;
     try {
       const successfulDelete = await deleteUser(userId);

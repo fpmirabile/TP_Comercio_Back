@@ -1,6 +1,6 @@
 export { User } from "./user/user";
 export { Product } from "./products/product";
-export { Category } from "./products/category";
+export { Category } from "./category/category";
 export { Order } from "./orders/order";
 export { OrderItem } from "./orders/order-item";
 export { Billing } from "./user/billing";
