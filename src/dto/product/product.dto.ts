@@ -1,7 +1,9 @@
 export interface CreateProductDto {
+  active: boolean;
   name: string;
   stock?: number;
   price: number;
+  discount?: number;
   image: string | null; // will be base 64 or url
   categoryId: string;
 }

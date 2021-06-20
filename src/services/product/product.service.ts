@@ -6,7 +6,6 @@ import CloudinaryService from "../cloudinary/cloudinary.service";
 
 interface ProductSearchWhere {
   name?: FindOperator<string>;
-  order?: string;
   category?: { id: string };
 }
 
@@ -18,15 +17,15 @@ export const getProducts = async (payload: SearchProductDto): Promise<Array<Prod
   const skip = (payload.page - 1) * payload.pageSize; // Salteamos pagina * size, entonces nos aseguramos que estamos en la posicion correcta.
   const where: ProductSearchWhere = {};
   if (payload.search) {
-    where.name = Like(`%${payload.search}%`);
-    where.order = 'DESC';
+    where.name = Like(`%${payload.search}%`);    
   }
 
   if (payload.category) {
     where.category = { id: payload.category }
   }
 
-  return productRepository.find({ take: payload.pageSize, skip, where });
+  console.log(where);
+  return productRepository.find({ take: payload.pageSize, skip, where, relations: [ 'category' ] });
 };
 
 export const createProduct = async (payload: CreateProductDto): Promise<Product> => {
@@ -46,7 +45,9 @@ export const createProduct = async (payload: CreateProductDto): Promise<Product>
     stock: payload.stock,
     imageUrl: image,
     msrp: payload.price,
-    category
+    category,
+    discount: payload.discount,
+    active: payload.active,
   });
 };
 
@@ -79,17 +80,18 @@ export const updateProduct = async (payload: UpdateProductDto): Promise<Product>
     stock: payload.stock,
     msrp: payload.price,
     imageUrl: image,
-    category
+    category,
+    active: payload.active
   });
 };
 
-export const deleteProduct = async (id: string): Promise<boolean> => {
+export const deleteProductById = async (id: string): Promise<boolean> => {
   const productRepository = getRepository(Product);
   const product = await productRepository.findOne({ id });
   if (!product) {
     throw 'PRODUCT_NOT_FOUND';
   }
 
-  const deletedProd = await productRepository.delete(product);
+  const deletedProd = await productRepository.delete({ id });
   return !!deletedProd.affected;
 };

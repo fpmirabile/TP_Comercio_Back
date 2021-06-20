@@ -16,8 +16,10 @@ export class Product {
   name!: string;
   @Column()
   msrp!: number;
-  @Column()
-  actualPrice!: number;
+  @Column({
+    nullable: true
+  })
+  discount!: number;
   @Column({
     default: 0
   })
@@ -30,6 +32,10 @@ export class Product {
     default: 0
   })
   soldQuantity!: number;
+  @Column({
+    default: true
+  })
+  active!: boolean;
   @CreateDateColumn()
   createdAt!: Date;
   @UpdateDateColumn()

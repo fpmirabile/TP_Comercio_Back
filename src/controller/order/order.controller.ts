@@ -7,7 +7,7 @@ import { CRUDController } from '../base.controller';
 export default class OrderController implements CRUDController {
   public async getAll(_req: express.Request, res: express.Response, next: express.NextFunction) {
     try {
-      const orders = getOrders();
+      const orders = await getOrders();
       return res.status(200).send(orders);
     } catch (e) {
       next(e);
@@ -16,10 +16,10 @@ export default class OrderController implements CRUDController {
 
   public async create(req: express.Request, res: express.Response, next: express.NextFunction) {
     const request = req.body as NewOrderDto;
-    const userId = (req as any).user.userId;
+    const userId = (req as any).user.id;
 
     try {
-      const order = createOrder(request, userId);
+      const order = await createOrder(request, userId);
       return res.status(200).send(order);
     } catch (e) {
       next(e);

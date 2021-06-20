@@ -38,9 +38,9 @@ export default class AuthenticationService {
     };
 
     try {
-      await registerUser(request);
+      const user = await registerUser(request);
       // TODO: Send an email ?
-      return res.status(201).send();
+      return res.status(201).send({ email: user.email });
     } catch (e) {
       next(e);
     }

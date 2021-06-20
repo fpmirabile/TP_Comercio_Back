@@ -17,9 +17,9 @@ export class User {
   @PrimaryGeneratedColumn("uuid")
   id!: string;
   @Column({
-    unique: true
+    primary: false,
+    unique: true,
   })
-  @PrimaryColumn()
   email!: string;
   @Column()
   password!: string;

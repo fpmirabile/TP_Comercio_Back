@@ -1,19 +1,19 @@
 import express from 'express';
 import { CreateProductDto, SearchProductDto, UpdateProductDto } from '../../dto/product/product.dto';
-import { createProduct, deleteProduct, getProduct, getProducts, updateProduct } from '../../services/product/product.service';
+import { createProduct, deleteProductById, getProduct, getProducts, updateProduct } from '../../services/product/product.service';
 import { CRUDController } from '../base.controller';
 
 export default class ProductController implements CRUDController {
   public async getAll(req: express.Request, res: express.Response, next: express.NextFunction) {
     const request: SearchProductDto = {
-      search: req.params.search,
-      category: req.params.categoryId,
-      page: Number(req.params.page),
-      pageSize: Number(req.params.pageSize)
+      search: req.query.search as string | undefined,
+      category: req.query.categoryId as string | undefined,
+      page: Number(req.query.page),
+      pageSize: Number(req.query.pageSize)
     };
 
     try {
-      const products = getProducts(request);
+      const products = await getProducts(request);
       return res.status(200).send(products);
     } catch (e) {
       next(e);
@@ -23,6 +23,7 @@ export default class ProductController implements CRUDController {
   public async create(req: express.Request, res: express.Response, next: express.NextFunction) {
     const request: CreateProductDto = {
       name: req.body.name,
+      active: req.body.active,
       stock: req.body.stock,
       price: req.body.price,
       image: req.body.image,
@@ -30,7 +31,7 @@ export default class ProductController implements CRUDController {
     };
 
     try {
-      const newProduct = createProduct(request);
+      const newProduct = await createProduct(request);
       return res.status(200).send(newProduct);
     } catch (e) {
       next(e);
@@ -40,6 +41,7 @@ export default class ProductController implements CRUDController {
   public async update(req: express.Request, res: express.Response, next: express.NextFunction) {
     const request: UpdateProductDto = {
       id: req.body.id,
+      active: req.body.active,
       name: req.body.name,
       stock: req.body.stock,
       price: req.body.price,
@@ -48,7 +50,7 @@ export default class ProductController implements CRUDController {
     };
 
     try {
-      const updatedProduct = updateProduct(request);
+      const updatedProduct = await updateProduct(request);
       return res.status(200).send(updatedProduct);
     } catch (e) {
       next(e);
@@ -59,7 +61,7 @@ export default class ProductController implements CRUDController {
     const id = req.params.id;
 
     try {
-      const product = getProduct(id);
+      const product = await getProduct(id);
       return res.status(200).send(product);
     } catch (e) {
       next(e);
@@ -70,7 +72,7 @@ export default class ProductController implements CRUDController {
     const id = req.params.id;
 
     try {
-      const deleteCommand = deleteProduct(id);
+      const deleteCommand = await deleteProductById(id);
       return res.status(200).send(deleteCommand);
     } catch (e) {
       next(e);

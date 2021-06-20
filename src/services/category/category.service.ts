@@ -22,7 +22,7 @@ export const createCategory = async (payload: CategoryDto): Promise<Category> =>
   const category = new Category();
   return await categoryRepository.save({
     ...category,
-    payload
+    name: payload.name
   })
 }
 

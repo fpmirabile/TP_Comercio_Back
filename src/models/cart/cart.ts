@@ -8,7 +8,7 @@ export class Cart {
   @PrimaryGeneratedColumn('uuid')
   id!: string;
 
-  @ManyToOne(() => User, user => user.carts)
+  @ManyToOne(() => User, user => user.carts, { nullable: false })
   user!: User;
   @OneToMany(() => CartItem, cItem => cItem.cart, { cascade: true })
   items!: CartItem[];

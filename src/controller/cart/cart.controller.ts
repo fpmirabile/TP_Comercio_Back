@@ -1,6 +1,6 @@
 import express from 'express';
 import { CartItemDto } from '../../dto/cart/cart.dto';
-import { addNewItemToCart, deleteItemFromCart, getUserCart } from '../../services/cart/cart.service';
+import { addItemToCart, deleteItemFromCart, getUserCart } from '../../services/cart/cart.service';
 import { CRUDController } from "../base.controller";
 
 export default class CartController implements CRUDController {
@@ -21,7 +21,7 @@ export default class CartController implements CRUDController {
     };
 
     try {
-      const newCartItems = await addNewItemToCart(userId, request);
+      const newCartItems = await addItemToCart(userId, request);
       return res.status(200).send(newCartItems);
     } catch (e) {
       next(e);
@@ -43,11 +43,7 @@ export default class CartController implements CRUDController {
     const prodId: string = req.params.id;
     try {
       const successfulDelete = await deleteItemFromCart(userId, prodId);
-      if (!successfulDelete) {
-        throw 'DELETE_NOT_SUCCESSFUL';
-      }
-
-      return res.status(200).send();
+      return res.status(200).send(successfulDelete);
     } catch (e) {
       next(e);
     }

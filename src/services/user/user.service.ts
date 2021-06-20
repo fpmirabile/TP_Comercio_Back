@@ -6,6 +6,7 @@ import { JwtSigned } from "../../dto/auth/jwt.dto";
 import { User } from "../../models";
 import JwtService from "../jwt/jwt.service";
 import { UserDto } from "../../dto/user/user.dto";
+import { createNewCartByUser } from "../cart/cart.service";
 
 export const getUsers = async (): Promise<Array<User>> => {
   const userRepository = getRepository(User);
@@ -29,6 +30,16 @@ export const updateUser = async (id: string, payload: Omit<UserDto, 'id'>): Prom
   }
 
   const user = await getUser(id);
+  return user;
+}
+
+export const getUserById = async (userId: string): Promise<User> => {
+  const userRepository = getRepository(User);
+  const user = await userRepository.findOne({ id: userId });
+  if (!user) {
+    throw 'USER_NOT_FOUND';
+  }
+
   return user;
 }
 
@@ -85,6 +96,7 @@ export const registerUser = async (request: RegisterRequestDto): Promise<User> =
   const user = new User();
   user.email = request.email;
   user.password = bcrypt.hashSync(request.password, 8);
+  await createNewCartByUser(user);
   return userRepository.save(user);
 }
 

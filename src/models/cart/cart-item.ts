@@ -11,13 +11,15 @@ export class CartItem {
 
   @Column()
   price!: number;
-  @Column()
+  @Column({
+    nullable: true
+  })
   discount!: number;
   @Column()
   quantity!: number;
 
   @CreateDateColumn()
-  createdAt!: Date;
+  createdAt?: Date;
   @UpdateDateColumn()
-  updatedAt!: Date;
+  updatedAt?: Date;
 }

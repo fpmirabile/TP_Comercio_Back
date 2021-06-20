@@ -10,7 +10,8 @@ const PORT = process.env.PORT || 8000;
 
 const app: Application = express();
 
-app.use(express.json());
+// Por culpa de las imagenes en base 64, necesitamos subir este limit
+app.use(express.json({ limit: '50mb' }));
 app.use(morgan("tiny"));
 app.use(express.static("public"));
 

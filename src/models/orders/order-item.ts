@@ -12,11 +12,12 @@ export class OrderItem {
 
   @Column()
   price!: number;
-  @Column()
+  @Column({
+    nullable: true
+  })
   discount!: number;
   @Column()
   quantity!: number;
-
 
   static fromCartItem = (cartItem: CartItem, order: Order): OrderItem => {
     return {

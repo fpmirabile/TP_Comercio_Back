@@ -6,7 +6,7 @@ import { CRUDController } from '../base.controller';
 export default class CategoryController implements CRUDController {
   public async getAll(req: express.Request, res: express.Response, next: express.NextFunction) {
     try {
-      const categories = getAllCategories();
+      const categories = await getAllCategories();
       return res.status(200).send(categories);
     } catch (e) {
       next(e);
@@ -19,7 +19,7 @@ export default class CategoryController implements CRUDController {
     };
 
     try {
-      const newCategory = createCategory(request);
+      const newCategory = await createCategory(request);
       return res.status(200).send(newCategory);
     } catch (e) {
       next(e);
@@ -33,7 +33,7 @@ export default class CategoryController implements CRUDController {
     };
 
     try {
-      const updatedCategory = updateCategory(request);
+      const updatedCategory = await updateCategory(request);
       return res.status(200).send(updatedCategory);
     } catch (e) {
       next(e);
@@ -44,7 +44,7 @@ export default class CategoryController implements CRUDController {
     const id = req.params.id;
 
     try {
-      const category = getCategory(id);
+      const category = await getCategory(id);
       return res.status(200).send(category);
     } catch (e) {
       next(e);
@@ -55,7 +55,7 @@ export default class CategoryController implements CRUDController {
     const id = req.params.id;
 
     try {
-      const delCommand = deleteCategory(id);
+      const delCommand = await deleteCategory(id);
       return res.status(200).send(delCommand);
     } catch (e) {
       next(e);
