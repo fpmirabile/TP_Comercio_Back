@@ -25,6 +25,7 @@ export const createOrder = async (payload: NewOrderDto, userId: string): Promise
   items.forEach( async (i) => {
     const prod = await getProduct(i.product.id);
     prod.soldQuantity += i.quantity;
+    prod.stock -= i.quantity;
     await updateProduct(prod);
   });
   return await getOrder(order.id);
