@@ -8,6 +8,7 @@ interface ProductSearchWhere {
   name?: FindOperator<string>;
   category?: { id?: string, name?: string; };
   discount?: FindOperator<any>;
+  active: boolean
 }
 
 export const getProducts = async (payload: SearchProductDto): Promise<Array<Product>> => {
@@ -19,7 +20,9 @@ export const getProducts = async (payload: SearchProductDto): Promise<Array<Prod
   // Page - 1, porque el frontend  maneja + 1 para gusto del usuario.
   // No podemos ponerle pagina 0, no tiene sentido.
   const skip = (payload.page - 1) * payload.pageSize; // Salteamos pagina * size, entonces nos aseguramos que estamos en la posicion correcta.
-  const where: ProductSearchWhere = {};
+  const where: ProductSearchWhere = {
+    active: true,
+  };
   if (payload.search) {
     where.name = Like(`%${payload.search}%`);    
   }
@@ -37,14 +40,16 @@ export const getProducts = async (payload: SearchProductDto): Promise<Array<Prod
 
 export const getTopProducts = async (): Promise<Array<Product>> => {
   const productRepository = getRepository(Product);
-  const products = await productRepository.find({ order: { soldQuantity: 'ASC' }, take: 10, relations: [ 'category' ] });
+  const products = await productRepository.find({ where: { active: true }, order: { soldQuantity: 'ASC' }, take: 10, relations: [ 'category' ] });
   return products;
 };
 
 export const createProduct = async (payload: CreateProductDto): Promise<Product> => {
+  if (!payload.categoryId) {
+    throw 'CATEGORY_NOT_FOUND';
+  }
   const productRepository = getRepository(Product);
   const cloudinaryService = CloudinaryService.getInstance();
-
   const product = new Product();
   const category = await getCategory(payload.categoryId);
   let image: string | undefined;
@@ -66,7 +71,7 @@ export const createProduct = async (payload: CreateProductDto): Promise<Product>
 
 export const getProduct = async (id: string): Promise<Product> => {
   const productRepository = getRepository(Product);
-  const product = await productRepository.findOne({ id });
+  const product = await productRepository.findOne({ where: { id }, relations: ['category'] });
   if (!product) {
     throw 'PRODUCT_NOT_FOUND';
   }
@@ -77,26 +82,40 @@ export const getProduct = async (id: string): Promise<Product> => {
 export const updateProduct = async (payload: UpdateProductDto): Promise<Product> => {
   const productRepository = getRepository(Product);
   const cloudinaryService = CloudinaryService.getInstance();
-  const product = await productRepository.findOne({ id: payload.id });
+  const product = await productRepository.findOne({ where: { id: payload.id }, relations: ['category'] });
   if (!product) {
     throw 'PRODUCT_NOT_FOUND';
   }
 
-  const category = await getCategory(payload.categoryId);
+  const category = await getCategory(payload.categoryId || product.category.id);
   let image: string | undefined;
   if (payload.image) {
     image = await cloudinaryService.uploadImage(payload.image);
   }
   return productRepository.save({
     ...product,
-    name: payload.name,
-    stock: payload.stock,
-    msrp: payload.price,
-    imageUrl: image,
+    name: payload.name || product.name,
+    stock: payload.stock || product.stock,
+    msrp: payload.price || product.msrp,
+    imageUrl: image || product.imageUrl,
     category,
-    active: payload.active
+    active: payload.active || product.active,
+    discount: payload.discount || product.discount,
+    soldQuantity: payload.soldQuantity || product.soldQuantity,
   });
 };
+
+export const deactiveProduct = async(id: string): Promise<boolean> => {
+  const productRepository = getRepository(Product);
+  const product = await productRepository.findOne({ id });
+  if (!product) {
+    throw 'PRODUCT_NOT_FOUND';
+  }
+
+  product.active = false;
+  productRepository.save(product);
+  return true;
+}
 
 export const deleteProductById = async (id: string): Promise<boolean> => {
   const productRepository = getRepository(Product);

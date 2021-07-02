@@ -1,6 +1,6 @@
 import express from 'express';
 import { CreateProductDto, SearchProductDto, UpdateProductDto } from '../../dto/product/product.dto';
-import { createProduct, deleteProductById, getProduct, getProducts, getTopProducts, updateProduct } from '../../services/product/product.service';
+import { createProduct, deactiveProduct, getProduct, getProducts, getTopProducts, updateProduct } from '../../services/product/product.service';
 import { CRUDController } from '../base.controller';
 
 export default class ProductController implements CRUDController {
@@ -58,7 +58,8 @@ export default class ProductController implements CRUDController {
       stock: req.body.stock,
       price: req.body.price,
       image: req.body.image,
-      categoryId: req.body.categoryId
+      categoryId: req.body.categoryId,
+      discount: req.body.discount,
     };
 
     try {
@@ -84,7 +85,7 @@ export default class ProductController implements CRUDController {
     const id = req.params.id;
 
     try {
-      const deleteCommand = await deleteProductById(id);
+      const deleteCommand = await deactiveProduct(id);
       return res.status(200).send({ operation: deleteCommand });
     } catch (e) {
       next(e);

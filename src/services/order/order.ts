@@ -3,6 +3,7 @@ import { NewOrderDto } from '../../dto/order/order.dto';
 import { CartItem, Order, OrderItem } from "../../models";
 import { OrderStatus } from "../../models/orders/order";
 import { deleteAllProductsFromCart, deleteItemFromCart, getCartItemsByCart, getUserCart } from "../cart/cart.service";
+import { getProduct, updateProduct } from "../product/product.service";
 import { getUser } from "../user/user.service";
 
 export const getOrders = async (): Promise<Array<Order>> => {
@@ -20,11 +21,16 @@ export const createOrder = async (payload: NewOrderDto, userId: string): Promise
     comments: payload.comments,
   });
 
-  await createOrderDetail(order, userId);
+  const items = await createOrderDetail(order, userId);
+  items.forEach( async (i) => {
+    const prod = await getProduct(i.product.id);
+    prod.soldQuantity += i.quantity;
+    await updateProduct(prod);
+  });
   return await getOrder(order.id);
 };
 
-const createOrderDetail = async (order: Order, userId: string): Promise<OrderItem> => {
+const createOrderDetail = async (order: Order, userId: string): Promise<OrderItem[]> => {
   const orderItemRepository = getRepository(OrderItem);
   const cart = await getUserCart(userId);
   const cartItems = await getCartItemsByCart(cart.id);
@@ -40,8 +46,8 @@ const createOrderDetail = async (order: Order, userId: string): Promise<OrderIte
     throw 'COULDN\'T_DELETE_CART_ITEMS';
   }
 
-  await orderItemRepository.save(details);
-  return new OrderItem();
+  const items = await orderItemRepository.save(details);
+  return items;
 }
 
 export const getOrder = async (id: string): Promise<Order> => {

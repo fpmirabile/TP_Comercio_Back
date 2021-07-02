@@ -16,6 +16,8 @@ export class Order {
   @PrimaryGeneratedColumn('uuid')
   id!: string;
   @Column({
+    type: 'enum',
+    enum: OrderStatus,
     default: OrderStatus.CREATED
   })
   status!: OrderStatus;
