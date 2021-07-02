@@ -16,10 +16,7 @@ export default class AuthenticationService {
     };
 
     try {
-      const response = {
-        tokens: await doLogin(loginRequest),
-      };
-
+      const response = await doLogin(loginRequest);
       return res.status(200).send(response);
     } catch (e) {
       next(e);

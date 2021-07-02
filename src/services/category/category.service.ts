@@ -17,6 +17,16 @@ export const getCategory = async (id: string): Promise<Category> => {
   return category;
 };
 
+export const getCategoryByName = async (name: string): Promise<Category> => {
+  const categoryRepository = getRepository(Category);
+  const category = await categoryRepository.findOne({ where: { name } });
+  if (!category) {
+    throw 'CATEGORY_NOT_FOUND';
+  }
+  
+  return category;
+}
+
 export const createCategory = async (payload: CategoryDto): Promise<Category> => {
   const categoryRepository = getRepository(Category);
   const category = new Category();

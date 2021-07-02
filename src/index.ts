@@ -2,6 +2,7 @@ import "reflect-metadata";
 import { createConnection } from "typeorm";
 import express, { Application } from "express";
 import morgan from "morgan";
+import cors from 'cors';
 
 import Router from "./routes";
 import dbConfig from "./config/database";
@@ -13,6 +14,9 @@ const app: Application = express();
 // Por culpa de las imagenes en base 64, necesitamos subir este limit
 app.use(express.json({ limit: '50mb' }));
 app.use(morgan("tiny"));
+app.use(cors({
+  origin: '*'
+}));
 app.use(express.static("public"));
 
 app.use(Router);

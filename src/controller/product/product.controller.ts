@@ -1,6 +1,6 @@
 import express from 'express';
 import { CreateProductDto, SearchProductDto, UpdateProductDto } from '../../dto/product/product.dto';
-import { createProduct, deleteProductById, getProduct, getProducts, updateProduct } from '../../services/product/product.service';
+import { createProduct, deleteProductById, getProduct, getProducts, getTopProducts, updateProduct } from '../../services/product/product.service';
 import { CRUDController } from '../base.controller';
 
 export default class ProductController implements CRUDController {
@@ -8,12 +8,23 @@ export default class ProductController implements CRUDController {
     const request: SearchProductDto = {
       search: req.query.search as string | undefined,
       category: req.query.categoryId as string | undefined,
+      categoryName: req.query.categoryName as string | undefined,
       page: Number(req.query.page),
-      pageSize: Number(req.query.pageSize)
+      pageSize: Number(req.query.pageSize),
+      onlyDiscountItems: !!req.query.onlyDiscount,
     };
 
     try {
       const products = await getProducts(request);
+      return res.status(200).send(products);
+    } catch (e) {
+      next(e);
+    }
+  }
+
+  public async getTop(req: express.Request, res: express.Response, next: express.NextFunction) {
+    try {
+      const products = await getTopProducts();
       return res.status(200).send(products);
     } catch (e) {
       next(e);
@@ -27,7 +38,8 @@ export default class ProductController implements CRUDController {
       stock: req.body.stock,
       price: req.body.price,
       image: req.body.image,
-      categoryId: req.body.categoryId
+      categoryId: req.body.categoryId,
+      discount: req.body.discount,
     };
 
     try {
@@ -73,7 +85,7 @@ export default class ProductController implements CRUDController {
 
     try {
       const deleteCommand = await deleteProductById(id);
-      return res.status(200).send(deleteCommand);
+      return res.status(200).send({ operation: deleteCommand });
     } catch (e) {
       next(e);
     }

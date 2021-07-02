@@ -1,17 +1,21 @@
-import { FindOperator, getRepository, Like } from "typeorm";
+import { FindOperator, getRepository, IsNull, Like, MoreThan, Not,  } from "typeorm";
 import { CreateProductDto, SearchProductDto, UpdateProductDto } from "../../dto/product/product.dto";
 import { Product } from "../../models";
-import { getCategory } from "../category/category.service";
+import { getCategory, getCategoryByName } from "../category/category.service";
 import CloudinaryService from "../cloudinary/cloudinary.service";
 
 interface ProductSearchWhere {
   name?: FindOperator<string>;
-  category?: { id: string };
+  category?: { id?: string, name?: string; };
+  discount?: FindOperator<any>;
 }
 
 export const getProducts = async (payload: SearchProductDto): Promise<Array<Product>> => {
   const productRepository = getRepository(Product);
-
+  if (payload.categoryName) {
+    const category = await getCategoryByName(payload.categoryName);
+    payload.category = category.id;
+  }
   // Page - 1, porque el frontend  maneja + 1 para gusto del usuario.
   // No podemos ponerle pagina 0, no tiene sentido.
   const skip = (payload.page - 1) * payload.pageSize; // Salteamos pagina * size, entonces nos aseguramos que estamos en la posicion correcta.
@@ -24,8 +28,17 @@ export const getProducts = async (payload: SearchProductDto): Promise<Array<Prod
     where.category = { id: payload.category }
   }
 
-  console.log(where);
+  if (payload.onlyDiscountItems) {
+    where.discount = MoreThan(0)
+  }
+
   return productRepository.find({ take: payload.pageSize, skip, where, relations: [ 'category' ] });
+};
+
+export const getTopProducts = async (): Promise<Array<Product>> => {
+  const productRepository = getRepository(Product);
+  const products = await productRepository.find({ order: { soldQuantity: 'ASC' }, take: 10, relations: [ 'category' ] });
+  return products;
 };
 
 export const createProduct = async (payload: CreateProductDto): Promise<Product> => {

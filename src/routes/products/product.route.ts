@@ -6,9 +6,11 @@ import { isAdmin } from "../../middleware/user";
 const router = express.Router();
 const controller = new ProductController();
 
-router.get("/", authenticated, controller.getAll);
+router.get("/", controller.getAll);
 
-router.get("/:id", authenticated, controller.getOne);
+router.get("/product/:id", controller.getOne);
+
+router.get("/top", controller.getTop);
 
 router.post("/", authenticated, isAdmin, controller.create);
 

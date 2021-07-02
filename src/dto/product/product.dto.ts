@@ -15,6 +15,8 @@ export interface UpdateProductDto extends CreateProductDto {
 export interface SearchProductDto {
   search?: string;
   category?: string;
+  categoryName?: string;
   page: number;
   pageSize: number;
+  onlyDiscountItems: boolean;
 }

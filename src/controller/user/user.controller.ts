@@ -5,9 +5,11 @@ import {
   getUser,
   updateUser,
   deleteUser,
+  getUserById,
 } from "../../services/user/user.service";
 import { UserDto } from "../../dto/user/user.dto";
 import { CRUDController } from '../base.controller';
+import { omit } from 'lodash';
 
 export default class UserController implements CRUDController {
 
@@ -74,6 +76,16 @@ export default class UserController implements CRUDController {
       }
 
       return res.status(200).send();
+    } catch (e) {
+      next(e);
+    }
+  }
+
+  public async me(req: express.Request, res: express.Response, next: express.NextFunction) {
+    const user = (req as any).user;
+    try {
+      const response = omit(user, ['password', 'createdAt', 'updatedAt']);
+      return res.status(200).send(response);
     } catch (e) {
       next(e);
     }

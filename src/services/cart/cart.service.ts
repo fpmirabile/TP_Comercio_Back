@@ -34,7 +34,7 @@ export const getCartItemsByCart = async (cartId: string): Promise<CartItem[]> =>
 export const getUserCart = async (userId: string): Promise<Cart> => {
   const cartRepository = getRepository(Cart);
   const user = await getUserById(userId);
-  let cart = await cartRepository.findOne({ where: { user }, relations: ['items'] });
+  let cart = await cartRepository.findOne({ where: { user }, relations: ['items', 'items.product'] });
   if (!cart) {
     cart = await createNewCartByUserId(userId);
   }

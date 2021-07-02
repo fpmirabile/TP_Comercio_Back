@@ -7,6 +7,7 @@ import { User } from "../../models";
 import JwtService from "../jwt/jwt.service";
 import { UserDto } from "../../dto/user/user.dto";
 import { createNewCartByUser } from "../cart/cart.service";
+import { pick } from 'lodash';
 
 export const getUsers = async (): Promise<Array<User>> => {
   const userRepository = getRepository(User);
@@ -71,7 +72,7 @@ export const deleteUser = async (id: string): Promise<boolean> => {
 
 export const doLogin = async (
   request: LoginRequestDto
-): Promise<JwtSigned> => {
+): Promise<{ user: { email: string, id: string, isAdmin: boolean }, tokens: JwtSigned }> => {
   const userRepository = getRepository(User);
   const user = await userRepository.findOne({ email: request.email });
   if (!user) {
@@ -84,7 +85,11 @@ export const doLogin = async (
 
   const jwtService = new JwtService();
   const tokens = jwtService.createJWT({ userId: user.id });
-  return tokens;
+  const responseUser = pick(user, ['id', 'email', 'isAdmin'])
+  return {
+    user: responseUser,
+    tokens
+  };
 };
 
 export const registerUser = async (request: RegisterRequestDto): Promise<User> => {
@@ -96,8 +101,9 @@ export const registerUser = async (request: RegisterRequestDto): Promise<User> =
   const user = new User();
   user.email = request.email;
   user.password = bcrypt.hashSync(request.password, 8);
-  await createNewCartByUser(user);
-  return userRepository.save(user);
+  const newUser = await userRepository.save(user);
+  await createNewCartByUser(newUser);
+  return newUser;
 }
 
 export const resetPassword = async (email: string): Promise<boolean> => {
@@ -105,6 +111,6 @@ export const resetPassword = async (email: string): Promise<boolean> => {
   // mando el mail
   // if mail se mando
   // return true
-  
+
   return false;
 }
