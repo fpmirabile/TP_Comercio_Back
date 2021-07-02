@@ -7,7 +7,7 @@ import { getUser } from "../services/user/user.service";
 
 export const validateLogin = [
   body("email").isEmail().notEmpty(),
-  body("password").isStrongPassword(),
+  // body("password").isStrongPassword(),
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const errors = validationResult(req);
     if (!errors.isEmpty())

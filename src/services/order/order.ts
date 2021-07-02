@@ -8,7 +8,7 @@ import { getUser } from "../user/user.service";
 
 export const getOrders = async (): Promise<Array<Order>> => {
   const orderRepository = getRepository(Order);
-  return orderRepository.find({ relations: ['details'] });
+  return orderRepository.find({ relations: ['details', 'user', 'details.product'] });
 };
 
 export const createOrder = async (payload: NewOrderDto, userId: string): Promise<Order> => {
@@ -53,7 +53,7 @@ const createOrderDetail = async (order: Order, userId: string): Promise<OrderIte
 
 export const getOrder = async (id: string): Promise<Order> => {
   const orderRepository = getRepository(Order);
-  const order = await orderRepository.findOne({ where: { id: id }, relations: [ 'details']  });
+  const order = await orderRepository.findOne({ where: { id: id }, relations: [ 'details', 'details.user']  });
   if (!order) {
     throw 'ORDER_NOT_FOUND';
   }
