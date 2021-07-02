@@ -1,6 +1,6 @@
 import express from 'express';
 import { CartItemDto } from '../../dto/cart/cart.dto';
-import { addItemToCart, deleteItemFromCart, getUserCart } from '../../services/cart/cart.service';
+import { addItemToCart, deleteItemFromCart, getUserCart, updateQuantityOnCartItem } from '../../services/cart/cart.service';
 import { CRUDController } from "../base.controller";
 
 export default class CartController implements CRUDController {
@@ -22,6 +22,21 @@ export default class CartController implements CRUDController {
 
     try {
       const newCartItems = await addItemToCart(userId, request);
+      return res.status(200).send(newCartItems);
+    } catch (e) {
+      next(e);
+    }
+  }
+
+  public async updateQuantity(req: express.Request, res: express.Response, next: express.NextFunction) {
+    const userId = (req as any).user.id;
+    const request: CartItemDto = {
+      prodId: req.params.id,
+      quantity: req.body.quantity
+    };
+
+    try {
+      const newCartItems = await updateQuantityOnCartItem(request.prodId, userId, request.quantity);
       return res.status(200).send(newCartItems);
     } catch (e) {
       next(e);

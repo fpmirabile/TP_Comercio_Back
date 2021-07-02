@@ -42,12 +42,22 @@ export const getUserCart = async (userId: string): Promise<Cart> => {
   return cart;
 }
 
+export const updateQuantityOnCartItem = async (prodId: string, userId: string, newQuantity: number) => {
+  const cartItemRepository = getRepository(CartItem);
+  const cart = await getUserCart(userId);
+
+  const cartItem = await getCartItemsByProductAndCart(cart.id, prodId);
+  if (!cartItem) {
+    throw 'CART_ITEM_NOT_FOUND';
+  }
+
+  cartItem.quantity = newQuantity;
+  return await cartItemRepository.save(cartItem);
+}
+
 export const addItemToCart = async (userId: string, payload: CartItemDto): Promise<CartItem> => {
   const cartItemRepository = getRepository(CartItem);
   const cart = await getUserCart(userId);
-  if (!cart) {
-    throw 'CART_NOT_FOUND';
-  }
 
   const cartItem = await getCartItemsByProductAndCart(cart.id, payload.prodId);
   if (!cartItem) {

@@ -9,9 +9,10 @@ const controller = new CartController();
 router.get("/", authenticated, controller.getOne);
 
 // Agregamos items al carrito
-router.put("/", authenticated, isAdmin, controller.update);
+router.put("/", authenticated, controller.update);
 
-// La unica funcionalidad que va a aceptar este endpoint es delete de items
-router.delete("/item/:id", authenticated, isAdmin, controller.delete);
+router.put("/item/:id", authenticated, controller.updateQuantity)
+
+router.delete("/item/:id", authenticated, controller.delete);
 
 export default router;

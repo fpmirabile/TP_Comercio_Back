@@ -20,7 +20,7 @@ export default class CategoryController implements CRUDController {
 
     try {
       const newCategory = await createCategory(request);
-      return res.status(200).send(newCategory);
+      return res.status(200).send({ name: newCategory.name });
     } catch (e) {
       next(e);
     }
