@@ -1,25 +1,31 @@
-import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-import { Product } from "../products/product";
-import { Cart } from "./cart";
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  ManyToOne,
+  UpdateDateColumn,
+} from 'typeorm'
+import { Product } from '../products/product'
+import { Cart } from './cart'
 
 @Entity()
 export class CartItem {
-  @ManyToOne(() => Cart, cart => cart.items, { primary: true })
-  cart!: Cart;
+  @ManyToOne(() => Cart, (cart) => cart.items, { primary: true })
+  cart!: Cart
   @ManyToOne(() => Product, { primary: true })
-  product!: Product;
+  product!: Product
 
   @Column()
-  price!: number;
+  price!: number
   @Column({
-    nullable: true
+    nullable: true,
   })
-  discount!: number;
+  discount!: number
   @Column()
-  quantity!: number;
+  quantity!: number
 
   @CreateDateColumn()
-  createdAt?: Date;
+  createdAt?: Date
   @UpdateDateColumn()
-  updatedAt?: Date;
+  updatedAt?: Date
 }

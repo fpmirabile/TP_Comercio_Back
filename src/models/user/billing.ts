@@ -1,24 +1,23 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
-import { AddressFields } from "./address";
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm'
+import { AddressFields } from './address'
 
 @Entity()
 export class Billing {
   @PrimaryGeneratedColumn()
-  id!: number;
+  id!: number
   @Column()
-  firstName!: string;
+  firstName!: string
   @Column()
-  lastName!: string;
+  lastName!: string
   @Column()
-  creditCardType!: string;
+  creditCardType!: string
   @Column()
-  creditCardNumber!: number;
+  creditCardNumber!: number
   @Column({
-    length: 5
+    length: 5,
   })
-  creditCardExpiration!: string;
+  creditCardExpiration!: string
 
-  @Column(_ => AddressFields)
-  address!: AddressFields;
+  @Column((_) => AddressFields)
+  address!: AddressFields
 }
-

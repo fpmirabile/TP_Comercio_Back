@@ -1,28 +1,28 @@
-import { Column, Entity, ManyToOne, OneToMany } from "typeorm";
-import { CartItem } from "../cart/cart-item";
-import { Product } from "../products/product";
-import { Order } from "./order";
+import { Column, Entity, ManyToOne } from 'typeorm'
+import { CartItem } from '../cart/cart-item'
+import { Product } from '../products/product'
+import { Order } from './order'
 
 @Entity()
 export class OrderItem {
-  @ManyToOne(_ => Product, { primary: true })
-  product!: Product;
-  @ManyToOne(_ => Order, order => order.details, { primary: true })
-  order!: Order;
+  @ManyToOne((_) => Product, { primary: true })
+  product!: Product
+  @ManyToOne((_) => Order, (order) => order.details, { primary: true })
+  order!: Order
 
   @Column()
-  price!: number;
+  price!: number
   @Column({
-    nullable: true
+    nullable: true,
   })
-  discount!: number;
+  discount!: number
   @Column()
-  quantity!: number;
+  quantity!: number
 
   static fromCartItem = (cartItem: CartItem, order: Order): OrderItem => {
     return {
       ...cartItem,
-      order
+      order,
     }
   }
 }

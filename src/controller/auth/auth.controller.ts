@@ -1,8 +1,11 @@
-import express from "express";
-import { LoginRequestDto, LoginResponseDto } from "../../dto/auth/login.dto";
-import { RegisterRequestDto } from "../../dto/auth/register.dto";
-import { User } from "../../models";
-import { doLogin, registerUser, resetPassword } from "../../services/user/user.service";
+import express from 'express'
+import { LoginRequestDto } from '../../dto/auth/login.dto'
+import { RegisterRequestDto } from '../../dto/auth/register.dto'
+import {
+  doLogin,
+  registerUser,
+  resetPassword,
+} from '../../services/user/user.service'
 
 export default class AuthenticationService {
   public async login(
@@ -13,13 +16,13 @@ export default class AuthenticationService {
     const loginRequest: LoginRequestDto = {
       email: req.body.email,
       password: req.body.password,
-    };
+    }
 
     try {
-      const response = await doLogin(loginRequest);
-      return res.status(200).send(response);
+      const response = await doLogin(loginRequest)
+      return res.status(200).send(response)
     } catch (e) {
-      next(e);
+      next(e)
     }
   }
 
@@ -32,14 +35,14 @@ export default class AuthenticationService {
       email: req.body.email,
       password: req.body.password,
       confirmPassword: req.body.confirmPassword,
-    };
+    }
 
     try {
-      const user = await registerUser(request);
+      const user = await registerUser(request)
       // TODO: Send an email ?
-      return res.status(201).send({ email: user.email });
+      return res.status(201).send({ email: user.email })
     } catch (e) {
-      next(e);
+      next(e)
     }
   }
 
@@ -50,13 +53,13 @@ export default class AuthenticationService {
   ) {
     const request = {
       email: req.body.email,
-    };
+    }
 
     try {
-      const operation = await resetPassword(request.email);
-      return res.status(200).json({ operation });
+      const operation = await resetPassword(request.email)
+      return res.status(200).json({ operation })
     } catch (e) {
-      next(e);
+      next(e)
     }
   }
 }

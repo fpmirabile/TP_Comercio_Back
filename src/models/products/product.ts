@@ -5,42 +5,44 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
-} from "typeorm";
-import { Category } from "../category/category";
+} from 'typeorm'
+import { Category } from '../category/category'
 
 @Entity()
 export class Product {
   @PrimaryGeneratedColumn('uuid')
-  id!: string;
+  id!: string
   @Column()
-  name!: string;
+  name!: string
   @Column()
-  msrp!: number;
+  msrp!: number
   @Column({
-    nullable: true
+    nullable: true,
   })
-  discount!: number;
+  discount!: number
   @Column({
-    default: 0
+    default: 0,
   })
-  stock!: number;
+  stock!: number
   @Column({
-    nullable: true
+    nullable: true,
   })
-  imageUrl?: string;
+  imageUrl?: string
   @Column({
-    default: 0
+    default: 0,
   })
-  soldQuantity!: number;
+  soldQuantity!: number
   @Column({
-    default: true
+    default: true,
   })
-  active!: boolean;
+  active!: boolean
   @CreateDateColumn()
-  createdAt!: Date;
+  createdAt!: Date
   @UpdateDateColumn()
-  updatedAt!: Date;
+  updatedAt!: Date
 
-  @ManyToOne(_ => Category, category => category.products, { cascade: true })
-  category!: Category;
+  @ManyToOne((_) => Category, (category) => category.products, {
+    cascade: true,
+  })
+  category!: Category
 }

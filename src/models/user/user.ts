@@ -6,37 +6,36 @@ import {
   OneToMany,
   OneToOne,
   Entity,
-  PrimaryColumn,
-} from "typeorm";
-import { Order } from "../orders/order";
-import { Billing } from "./billing";
-import { Cart } from "../cart/cart";
+} from 'typeorm'
+import { Order } from '../orders/order'
+import { Billing } from './billing'
+import { Cart } from '../cart/cart'
 
 @Entity()
 export class User {
-  @PrimaryGeneratedColumn("uuid")
-  id!: string;
+  @PrimaryGeneratedColumn('uuid')
+  id!: string
   @Column({
     primary: false,
     unique: true,
   })
-  email!: string;
+  email!: string
   @Column()
-  password!: string;
+  password!: string
   @Column({
-    default: false
+    default: false,
   })
-  isAdmin!: boolean;
+  isAdmin!: boolean
   @CreateDateColumn()
-  createdAt!: Date;
+  createdAt!: Date
   @UpdateDateColumn()
-  updatedAt!: Date;
+  updatedAt!: Date
 
   @OneToMany((_) => Order, (orders) => orders.user)
-  orders!: Order[];
+  orders!: Order[]
   @OneToOne((_) => Billing)
-  billing!: Billing;
-  
-  @OneToMany(() => Cart, cart => cart.user)
+  billing!: Billing
+
+  @OneToMany(() => Cart, (cart) => cart.user)
   carts!: Cart[]
 }

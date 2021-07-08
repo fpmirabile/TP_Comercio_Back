@@ -1,8 +1,8 @@
 export interface JwtUnsigned {
-    userId: string;
+  userId: string
 }
 
 export interface JwtSigned {
-    token: string;
-    refreshToken: string;
+  token: string
+  refreshToken: string
 }

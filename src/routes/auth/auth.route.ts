@@ -1,18 +1,14 @@
-import express from "express";
-import AuthService from "../../controller/auth/auth.controller";
-import { validateLogin } from "../../middleware/auth";
+import express from 'express'
+import AuthService from '../../controller/auth/auth.controller'
+import { validateLogin } from '../../middleware/auth'
 
-const router = express.Router();
-const authController = new AuthService();
+const router = express.Router()
+const authController = new AuthService()
 
-router.post(
-  "/login",
-  validateLogin,
-  authController.login
-);
+router.post('/login', validateLogin, authController.login)
 
-router.post('/register', authController.register);
+router.post('/register', authController.register)
 
-router.post('change-password', authController.changePassword);
+router.post('change-password', authController.changePassword)
 
-export default router;
+export default router

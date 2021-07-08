@@ -1,9 +1,8 @@
-
 export interface CartDto {
-  cartId: string;
+  cartId: string
 }
 
 export interface CartItemDto {
-  prodId: string;
-  quantity: number;
+  prodId: string
+  quantity: number
 }

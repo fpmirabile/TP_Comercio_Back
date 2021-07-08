@@ -1,6 +1,6 @@
 export interface UserDto {
-  id?: string;
-  email: string;
-  password: string;
-  isAdmin: boolean;
+  id?: string
+  email: string
+  password: string
+  isAdmin: boolean
 }

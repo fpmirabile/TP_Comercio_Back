@@ -1,7 +1,11 @@
-import express from 'express';
+import express from 'express'
 
 export default class ProductController {
-  public async doPay(req: express.Request, res: express.Response, next: express.NextFunction) {
+  public async doPay(
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ) {
     // const request = {
     //   name: req.body.name,
     //   active: req.body.active,
@@ -10,7 +14,6 @@ export default class ProductController {
     //   image: req.body.image,
     //   categoryId: req.body.categoryId
     // };
-
     // try {
     //   const newProduct = await createProduct(request);
     //   return res.status(200).send(newProduct);
@@ -19,7 +22,11 @@ export default class ProductController {
     // }
   }
 
-  public async update(req: express.Request, res: express.Response, next: express.NextFunction) {
+  public async update(
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ) {
     //     const request = {
     //       id: req.body.id,
     //       active: req.body.active,
@@ -29,7 +36,6 @@ export default class ProductController {
     //       image: req.body.image,
     //       categoryId: req.body.categoryId
     //     };
-
     //     try {
     //       const updatedProduct = await updateProduct(request);
     //       return res.status(200).send(updatedProduct);
@@ -39,9 +45,12 @@ export default class ProductController {
     //   }
   }
 
-  public async getPayment(req: express.Request, res: express.Response, next: express.NextFunction) {
+  public async getPayment(
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ) {
     // const id = req.params.id;
-
     // try {
     //   const product = await getProduct(id);
     //   return res.status(200).send(product);
@@ -50,9 +59,12 @@ export default class ProductController {
     // }
   }
 
-  public async cancelPayment(req: express.Request, res: express.Response, next: express.NextFunction) {
+  public async cancelPayment(
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ) {
     // const id = req.params.id;
-
     // try {
     //   const deleteCommand = await deleteProductById(id);
     //   return res.status(200).send(deleteCommand);
