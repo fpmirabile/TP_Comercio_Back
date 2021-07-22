@@ -67,11 +67,23 @@ export const getOrder = async (id: string): Promise<Order> => {
   const orderRepository = getRepository(Order)
   const order = await orderRepository.findOne({
     where: { id: id },
-    relations: ['details', 'details.user'],
+    relations: ['details', 'user'],
   })
   if (!order) {
     throw 'ORDER_NOT_FOUND'
   }
 
   return order
+}
+
+export const getOrdersByUserId = async (userId: string): Promise<Order[]> => {
+  const orderRepository = getRepository(Order)
+  const orders = await orderRepository.find({
+    where: {
+      user: { id: userId },
+    },
+    relations: ['details', 'details.product']
+  })
+
+  return orders || []
 }

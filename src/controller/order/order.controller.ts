@@ -1,5 +1,5 @@
 import express from 'express'
-import { getOrders, getOrder, createOrder } from '../../services/order/order'
+import { getOrders, getOrder, createOrder, getOrdersByUserId } from '../../services/order/order'
 import { NewOrderDto, OrderDto } from '../../dto/order/order.dto'
 import { CRUDController } from '../base.controller'
 
@@ -54,6 +54,21 @@ export default class OrderController implements CRUDController {
     try {
       const order = await getOrder(request.orderId)
       return res.status(200).send(order)
+    } catch (e) {
+      next(e)
+    }
+  }
+
+  public async getMine(req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ) {
+    const userId = (req as any).user.id
+
+    console.log('user id ' + userId)
+    try {
+      const myOrders = await getOrdersByUserId(userId)
+      return res.status(200).send(myOrders)
     } catch (e) {
       next(e)
     }

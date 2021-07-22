@@ -6,9 +6,11 @@ import { isAdmin } from '../../middleware/user'
 const router = express.Router()
 const controller = new OrderController()
 
-router.get('/', authenticated, isAdmin, controller.getAll)
+router.get('/getAll', authenticated, isAdmin, controller.getAll)
 
 router.get('/:id', authenticated, controller.getOne)
+
+router.get('/', authenticated, controller.getMine)
 
 router.post('/', authenticated, controller.create)
 

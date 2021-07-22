@@ -25,7 +25,7 @@ export const getProducts = async (
 ): Promise<Array<Product>> => {
   const productRepository = getRepository(Product)
   if (payload.categoryName) {
-    const category = await getCategoryByName(payload.categoryName)
+    const category = await getCategoryByName(payload.categoryName.toLowerCase())
     payload.category = category.id
   }
   // Page - 1, porque el frontend  maneja + 1 para gusto del usuario.

@@ -34,7 +34,7 @@ export const createCategory = async (
   const category = new Category()
   return await categoryRepository.save({
     ...category,
-    name: payload.name,
+    name: payload.name.toLowerCase(),
   })
 }
 
